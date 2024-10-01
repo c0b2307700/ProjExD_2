@@ -13,6 +13,7 @@ DELTA = {
     }
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
+
 def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     """
     引数はこうかとんor爆弾のRect
@@ -25,6 +26,7 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
     if obj_rct.top < 0 or HEIGHT < obj_rct.bottom:
         tate = False
     return yoko, tate 
+
 
 def gameover(screen):
     """
@@ -41,6 +43,7 @@ def gameover(screen):
     screen.blit(txt, [WIDTH/2 -190, HEIGHT/2])
     pg.display.update()
     time.sleep(5)
+
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
