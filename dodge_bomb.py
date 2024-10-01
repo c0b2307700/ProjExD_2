@@ -1,8 +1,8 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
-
 
 WIDTH, HEIGHT = 1100, 650
 DELTA = {
@@ -26,6 +26,22 @@ def check_bound(obj_rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate 
 
+def gameover(screen):
+    """
+    引数screen
+    黒の透過背景にGameOver
+    と出力される関数
+    """
+    surface = pg.Surface((WIDTH, HEIGHT))
+    pg.draw.rect(surface, (0, 0, 0), pg.Rect(0, 0, WIDTH, HEIGHT))
+    surface.set_alpha(128)
+    screen.blit(surface, [0, 0])
+    fonto = pg.font.Font(None, 100)
+    txt = fonto.render("GameOver", True, (255, 255, 255))
+    screen.blit(txt, [WIDTH/2 -190, HEIGHT/2])
+    pg.display.update()
+    time.sleep(5)
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
@@ -33,7 +49,7 @@ def main():
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
-    bd_img = pg.Surface((20, 20))  # からのsurface
+    bd_img = pg.Surface((20, 20))  # 空のSurface
     bd_img.set_colorkey((0, 0, 0))
     pg.draw.circle(bd_img, (255, 0, 0), (10, 10), 10)
     bd_rct = bd_img.get_rect()
@@ -42,15 +58,20 @@ def main():
     # bb_rct.centerY = random.randint(0, HEIGHT)  # このように表記できる
     vx, vy = +5, +5  # 爆弾の移動の変化量
 
+    accs = [a for a in range(1, 11)]  # 加速度のリスト
+
     clock = pg.time.Clock()
     tmr = 0
+  
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
+        
         if kk_rct.colliderect(bd_rct):  # こうかとんと爆弾が重なっていたら collide...が衝突判定をしてくれる
-            return 
+            gameover(screen)
+            return
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]  # 横座標, 縦座標の順
