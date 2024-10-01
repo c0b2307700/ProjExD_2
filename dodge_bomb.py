@@ -49,6 +49,9 @@ def main():
             if event.type == pg.QUIT: 
                 return
         screen.blit(bg_img, [0, 0]) 
+        if kk_rct.colliderect(bd_rct):  # こうかとんと爆弾が重なっていたら collide...が衝突判定をしてくれる
+            return 
+
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]  # 横座標, 縦座標の順
         # if key_lst[pg.K_UP]:
